@@ -1,69 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Dinamis Aritmatika</title>
+    <title>Perhitungan Aritmatika</title>
+    <script type="text/javascript">
+        function clearAndShowResult(result) {
+            document.body.innerHTML = result;
+        }
+    </script>
 </head>
 <body>
-    <h1>Perhitungan Aritmatika</h1>
-    <form action="#" method="post">
-        <label for="nama">Nama:</label>
-        <input type="text" id="nama" name="nama" required>
-        <br>
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Ambil nilai input dari form
+    $angkaPertama = $_POST['angkaPertama'];
+    $angkaKedua = $_POST['angkaKedua'];
+    $nama = $_POST['nama'];
 
-        <label for="angka1">Masukkan angka pertama (1-10):</label>
-        <input type="number" id="angka1" name="angka1" min="1" max="10" required>
-        <br>
+    // Lakukan perhitungan
+    $hasilTambah = $angkaPertama + $angkaKedua;
+    $hasilKurang = $angkaPertama - $angkaKedua;
+    $hasilKali = $angkaPertama * $angkaKedua;
+    $hasilBagi = $angkaPertama / $angkaKedua;
+    $hasilModulo = $angkaPertama % $angkaKedua;
 
-        <label for="angka2">Masukkan angka kedua (1-10):</label>
-        <input type="number" id="angka2" name="angka2" min="1" max="10" required>
-        <br>
+    // Buat hasil dalam bentuk string
+    $result = "Perhitungan Aritmatika<br>";
+    $result .= "Nama : " . $nama . "<br>";
+    $result .= "$angkaPertama + $angkaKedua = " . $hasilTambah . "<br>";
+    $result .= "$angkaPertama - $angkaKedua = " . $hasilKurang . "<br>";
+    $result .= "$angkaPertama * $angkaKedua = " . $hasilKali . "<br>";
+    $result .= "$angkaPertama / $angkaKedua = " . $hasilBagi . "<br>";
+    $result .= "$angkaPertama % $angkaKedua = " . $hasilModulo . "<br>";
 
-        <label for="operator">Operator:</label>
-        <select id="operator" name="operator" required>
-            <option value="+">+</option>
-            <option value="-">-</option>
-            <option value="*">*</option>
-            <option value="/">/</option>
-        </select>
-        <br>
+    // Output JavaScript untuk membersihkan halaman dan menampilkan hasil
+    echo "<script type='text/javascript'>clearAndShowResult(" . json_encode($result) . ");</script>";
+    exit();
+}
+?>
 
-        <button type="submit">Hitung</button>
-    </form>
-
-    <?php
-    if (isset($_POST['nama']) && isset($_POST['angka1']) && isset($_POST['angka2']) && isset($_POST['operator'])) {
-        $nama = $_POST['nama'];
-        $angka1 = $_POST['angka1'];
-        $angka2 = $_POST['angka2'];
-        $operator = $_POST['operator'];
-
-        switch ($operator) {
-            case '+':
-                $hasil = $angka1 + $angka2;
-                break;
-            case '-':
-                $hasil = $angka1 - $angka2;
-                break;
-            case '*':
-                $hasil = $angka1 * $angka2;
-                break;
-            case '/':
-                if ($angka2 == 0) {
-                    echo "Error: Pembagian dengan 0";
-                    exit;
-                }
-                $hasil = $angka1 / $angka2;
-                break;
-            default:
-                echo "Error: Operator tidak valid";
-                exit;
-        }
-
-        echo "<br>Hasil untuk $nama:<br>";
-        echo $angka1 . " " . $operator . " " . $angka2 . " = " . $hasil;
-    }
-    ?>
+<!-- Form HTML -->
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+    Masukkan nama anda: <input type="text" name="nama"><br>
+    Masukkan angka pertama (1-10): <input type="number" name="angkaPertama"><br>
+    Masukkan angka kedua (1-10): <input type="number" name="angkaKedua"><br>
+    <input type="submit" name="hitung" value="Hitung">
+</form>
 </body>
 </html>
